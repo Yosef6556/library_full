@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <title>Library Management System</title>
+  <style>
+    .input-table {
+      background-color: lightgray;
+      border-collapse: collapse;
+      width: 50%;
+    }
+
+    .input-table th {
+      background-color: lightgray;
+      border: 3px solid black;
+      padding: 8px;
+    }
+
+    .input-table td {
+      border: 1px solid black;
+      padding: 8px;
+    }
+
+    .input-table td:first-child {
+      font-weight: bold;
+    }
+
+    .input-table button {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <h2>Add a new loan:</h2>
+  <div id="loan-list"></div>
+
+  <table class="input-table">
+    <tr>
+      <td>Customer name:</td>
+      <td><input type="text" id="cust_name_" placeholder="ENTER CUSTOMER NAME" required></td>
+    </tr>
+    <tr>
+      <td>Book name:</td>
+      <td><input type="text" id="book_name_" placeholder="ENTER THE BOOK NAME" required></td>
+    </tr>
+    <tr>
+      <td>Loan date:</td>
+      <td><input type="date" id="loan_date_" placeholder="ENTER LOAN DATE" required></td>
+    </tr>
+    <tr>
+      <td>Return date:</td>
+      <td><input type="date" id="return_date_" placeholder="ENTER RETURN DATE" required></td>
+    </tr>
+    <tr>
+      <td colspan="2"><button onclick="newLoan()">Add new loan</button>
+      </td>
+    </tr>
+  </table>
+
+
+  <script>
+
+    const MY_SERVER = 'https://library-projact.onrender.com';
+
+    const newLoan = async () => {
+      const custName = document.getElementById('cust_name_').value;
+      const bookName = document.getElementById('book_name_').value;
+      const loanDate = document.getElementById('loan_date_').value;
+      const returnDate = document.getElementById('return_date_').value;
+
+      const data = {
+        cust_name: custName,
+        book_name: bookName,
+        loan_date: loanDate,
+        return_date: returnDate,
+      };
+
+      try {
+        const response = await axios.post(`${MY_SERVER}/loans/new`, data);
+        console.log(response.data);
+        // Handle the response or perform any additional actions
+        alert(`${bookName} Added successfully`)
+      } catch (error) {
+        console.error(error.response.data);
+        alert(`${custName}/${bookName} is not Exists`);
+        // Handle the error or display an error message
+      }
+    };
+
+
+
+
+
+  </script>
+</body>
+
+</html>

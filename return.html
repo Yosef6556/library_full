@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <title>Library Management System</title>
+    <style>
+        .input-table {
+            background-color: lightgray;
+            border-collapse: collapse;
+            width: 50%;
+        }
+
+        .input-table th {
+            background-color: lightgray;
+            /* Add this line to set the background color */
+            border: 3px solid black;
+            padding: 8px;
+        }
+
+        .input-table td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        .input-table td:first-child {
+            font-weight: bold;
+        }
+
+        .input-table button {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>return Book:</h2>
+    <table class="input-table">
+        <tr>
+            <td>Customer name:</td>
+            <td><input type="text" id="cust_name" placeholder="ENTER CUSTOMER NAME" required></td>
+        </tr>
+        <tr>
+            <td>Book name:</td>
+            <td><input type="text" id="book_name_return" placeholder="ENTER THE BOOK NAME" required></td>
+        </tr>
+        <tr>
+            <td>Return date:</td>
+            <td><input type="date" id="return_date" placeholder="ENTER RETURN DATE" required></td>
+        </tr>
+        <tr>
+            <td colspan="2"><button onclick="returnBook()">return Book</button>
+            </td>
+        </tr>
+    </table>
+
+    <script>
+        const MY_SERVER = 'https://library-projact.onrender.com';
+
+        async function returnBook() {
+            event.preventDefault();
+
+            const cust_name = document.getElementById('cust_name').value;
+            const book_name = document.getElementById('book_name_return').value;
+            const return_date = document.getElementById('return_date').value;
+
+            const data = {
+                cust_name: cust_name,
+                book_name: book_name,
+                return_date: return_date
+            };
+
+            try {
+                const response = await axios.post(`${MY_SERVER}/returnbook`, data);
+
+                if (response.status === 200) {
+                    alert("Book returned successfully!");
+                } else {
+                    alert("Error returning book.");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Error returning book.");
+            }
+        }
+    </script>
+</body>
+
+</html>

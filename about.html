@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="col-sm-8 text-left"> 
+        <h1>Wisdom Junction Library</h1>
+        <button type="button" class="btn btn-primary" id="toggleLibraryText">ABOUT...</button>
+        <div id="libraryText" style="display: none;">
+          <p>We are proud to be a highly successful library that plays a crucial role in helping individuals and communities thrive through the power of books and knowledge.</p>
+          <h3>Our Commitment</h3>
+          <p>At Your Library, our commitment to excellence and service drives us to provide valuable resources and support to librarians like you who play a vital role in shaping minds and fostering a love for learning.</p>
+          <h3>Services and Resources</h3>
+          <p>We offer an extensive book collection spanning various genres, subjects, and languages. Our state-of-the-art facilities provide a comfortable and efficient environment for your work. Our team of experienced librarians is here to offer professional support and guidance.</p>
+        </div>
+</body>
+<script>
+    document.getElementById("toggleLibraryText").addEventListener("click", function() {
+      const libraryText = document.getElementById("libraryText");
+      if (libraryText.style.display === "none") {
+        libraryText.style.display = "block";
+      } else {
+        libraryText.style.display = "none";
+      }
+    });
+  
+    const navbarLinks = document.getElementsByClassName("navbar-link");
+    for (let i = 0; i < navbarLinks.length; i++) {
+      navbarLinks[i].addEventListener("click", function(event) {
+        event.preventDefault();
+      });
+    }
+  </script>
+  
+</html>

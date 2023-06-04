@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <title>Library Management System</title>
+  <style>
+    .input-table {
+      background-color: lightgray;
+      border-collapse: collapse;
+      width: 50%;
+    }
+
+    .input-table td {
+      background-color: lightgray;
+      border: 3px solid black;
+      padding: 8px;
+    }
+
+    .input-table td:first-child {
+      font-weight: bold;
+    }
+
+    .input-table button {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Add a new customer:</h2>
+  <div id="customerssss"></div>
+
+  <table class="input-table">
+    <tr>
+      <td>Name:</td>
+      <td><input type="text" id="customer_name" placeholder="ENTER YOUR NAME" required></td>
+    </tr>
+    <tr>
+      <td>City:</td>
+      <td><input type="text" id="customer_city" placeholder="ENTER YOUR CITY" required></td>
+    </tr>
+    <tr>
+      <td>Age:</td>
+      <td><input type="number" id="customer_age" placeholder="ENTER YOUR AGE" required></td>
+    </tr>
+    <tr>
+      <td colspan="2"><button onclick="newCustomer()">Add new Customer</button></td>
+    </tr>
+  </table>
+
+  <br><br><br>
+
+  <script>
+    const MY_SERVER = 'https://library-projact.onrender.com';
+
+    const newCustomer = async () => {
+      let data = {
+        name: customer_name.value,
+        city: customer_city.value,
+        age: customer_age.value
+      };
+
+      try {
+        const response = await axios.post(`${MY_SERVER}/customers/new`, data);
+        console.log(response.data); // Optional: handle the response as needed
+      } catch (error) {
+        console.error(error); // Optional: handle the error as needed
+      }
+    }
+
+  </script>
+
+</body>
+
+</html>

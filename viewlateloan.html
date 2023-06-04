@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <title>Customers</title>
+    <style>
+        .loan-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.loan-table {
+    border-collapse: collapse;
+    background-color: red;
+    color: rgb(0, 0, 0); /* Optional: change text color to white for better visibility */
+}
+
+.loan-table th, .loan-table td {
+    border: 5px solid black;
+    padding: 8px;
+}
+
+
+    </style>
+</head>
+
+<body>
+    <h1>ALL loans</h2>
+    <div id="loann"></div>
+
+    <script>
+        const MY_SERVER = 'https://library-projact.onrender.com'
+        const getData = () => {
+    axios.get(`${MY_SERVER}/late_loans`).then(response => {
+        const data = response.data;
+        let tableHTML = `<table class="loan-table">
+                            <tr>
+                                <th>Customer Name</th>
+                                <th>Book Name</th>
+                                <th>Loan Date</th>
+                                <th>Return Date</th>
+                                <th>Action</th>
+                            </tr>`;
+        data.forEach(obj => {
+            tableHTML += `<tr>
+                            <td>${obj.customer_name}</td>
+                            <td>${obj.book_name}</td>
+                            <td>${obj.loan_date}</td>
+                            <td>${obj.return_date}</td>
+                            <td>
+                                <button onclick="delete_loan(${obj.id})">DELETE</button>
+                            </td>
+                        </tr>`;
+        });
+        tableHTML += '</table>';
+        loann.innerHTML = tableHTML;
+    });
+};
+
+
+        const delete_loan = async (id) => {
+            delete_loan = await axios.delete(MY_SERVER + `/late_loans${obi.id}`)
+        }
+        
+      
+
+        getData()
+
+    </script>
+
+</body>
+
+</html>

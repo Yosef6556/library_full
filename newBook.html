@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <title>Library Management System</title>
+    <style>
+        .input-table {
+            background-color: lightgray;
+            border-collapse: collapse;
+            width: 50%;
+        }
+
+        .input-table th {
+            background-color: lightgray;
+            /* Add this line to set the background color */
+            border: 3px solid black;
+            padding: 8px;
+        }
+
+        .input-table td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        .input-table td:first-child {
+            font-weight: bold;
+        }
+
+        .input-table button {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Add a new book -->
+    <div id="booksContainer"></div>
+
+    <h2>Add a new book:</h2>
+    <table class="input-table">
+        <tr>
+            <td>book Name:</td>
+            <td><input type="text" id="book_name" placeholder="ENTER BOOK NAME" required></td>
+        </tr>
+        <tr>
+            <td>Writer:</td>
+            <td><input type="text" id="writer" placeholder="ENTER Writer WRITER" required></td>
+        </tr>
+        <tr>
+            <td>Year Published:</td>
+            <td><input type="number" id="year_published" placeholder="ENTER BOOK YEAR" required></td>
+        </tr>
+        <tr>
+            <td>Loan:</td>
+            <td><select id="book_loan" name="options">
+                    <option value="1">up to 10 days</option>
+                    <option value="2">up to 5 days</option>
+                    <option value="3">up to 2 days</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><button onclick="newBook()">Add new book</button></td>
+        </tr>
+    </table>
+
+    <br><br><br>
+    <script>
+        const MY_SERVER = 'https://library-projact.onrender.com';
+
+        async function newBook() {
+            const book_name = document.getElementById('book_name').value;
+            const writer = document.getElementById('writer').value;
+            const year_published = document.getElementById('year_published').value;
+            const book_loan = document.getElementById('book_loan').value;
+
+            const data = {
+                bookname: book_name,
+                writer: writer,
+                year_published: year_published,
+                book_loan: book_loan
+            };
+
+            try {
+                const response = await axios.post(`${MY_SERVER}/books/new`, data);
+
+                if (response.status === 200) {
+                    alert("Book added successfully!");
+                    displayBooks();
+                } else {
+                    alert("Error adding book.");
+                }
+            } catch (error) {
+                console.error(error);
+                //alert("Error adding book.");
+            }
+        }
+
+        function getLoanText(loanValue) {
+            switch (loanValue) {
+                case '1':
+                    return 'up to 10 days';
+                case '2':
+                    return 'up to 5 days';
+                case '3':
+                    return 'up to 2 days';
+                default:
+                    return 'Loan information unavailable';
+            }
+        }
+
+        async function deleteBook(bookId) {
+            try {
+                const response = await axios.delete(`${MY_SERVER}/books/delete/${bookId}`);
+                console.log(response.data); // Optional: handle the response as needed
+                if (response.status === 200) {
+                    alert("Book deleted successfully!");
+                    displayBooks(); // Update the book list after deletion
+                } else {
+                    alert("Error deleting book.");
+                }
+            } catch (error) {
+                console.error(error); // Optional: handle the error as needed
+                alert("Error deleting book.");
+            }
+        }
+    </script>
+</body>
+
+</html>

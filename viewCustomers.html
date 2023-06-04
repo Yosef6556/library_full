@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script> 
+  <title>Customers Of the Library</title>
+  <style>
+    .customer-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .customer-table th,
+    .customer-table td {
+      padding: 8px;
+      text-align: left;
+      border: 5px solid #ddd;
+    }
+
+    .customer-table th {
+      background-color: #f2f2f2;
+    }
+
+    .customer-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .customer-table tr:hover {
+      background-color: #f5f5f5;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>ALL CUSTOMERS</h2>
+    <input type="text" id="search-name" placeholder="Enter customer name">
+    <button onclick="searchCustomer()">Search Customer</button>
+    <ul class="customer-list" id="customer-list"></ul>
+
+
+
+    <script>
+      const MY_SERVER = 'https://library-projact.onrender.com';
+
+      const searchCustomer = () => {
+        const searchName = document.getElementById('search-name').value;
+        axios.get(`${MY_SERVER}/customers/search/${searchName}`)
+          .then(response => {
+            const customers = response.data;
+            displayCustomers(customers);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      };
+
+      const displayCustomers = (customers) => {
+        const customerList = document.getElementById('customer-list');
+        customerList.innerHTML = '';
+
+        if (!customers || customers.length === 0) {
+          customerList.innerHTML = '<p>No customers found.</p>';
+          return;
+        }
+
+        let tableHTML = `
+    <table class="customer-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>City</th>
+          <th>Age</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+        customers.forEach(customer => {
+          tableHTML += `
+      <tr>
+        <td>${customer.name}</td>
+        <td>${customer.city}</td>
+        <td>${customer.age}</td>
+        <td>
+          <button onclick="deleteCustomer(${customer.id})">DELETE Customer</button>
+          <button onclick="updateCustomer(${customer.id})">Update Customer</button>
+        </td>
+      </tr>`;
+        });
+
+        tableHTML += `
+      </tbody>
+    </table>`;
+
+        customerList.innerHTML = tableHTML;
+      };
+
+
+
+      const getCustomers = () => {
+        axios.get(`${MY_SERVER}/customers`)
+          .then(response => {
+            const customers = response.data;
+            displayCustomers(customers);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      };
+      getCustomers();
+
+      const deleteCustomer = async (id) => {
+        try {
+          await axios.delete(`${MY_SERVER}/customers/delete/${id}`);
+          getCustomers();
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+
+      const updateCustomer = (id) => {
+  // You can prompt the user for updated details using window.prompt or display a form to update the customer information.
+  // After obtaining the updated details, you can send a PUT request to the server to update the customer.
+
+  // Example:
+  const newName = prompt('Enter the updated name:');
+  const newCity = prompt('Enter the updated city:');
+  const newAge = prompt('Enter the updated age:');
+
+  // Make a PUT request to update the customer
+  axios.put(`${MY_SERVER}/customers/update/${id}`, {
+      name: newName,
+      city: newCity,
+      age: newAge
+    })
+    .then(response => {
+      // Handle the response if needed
+      getCustomers(); // Refresh the customer list after updating
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};
+
+    </script>
+
+</body>
+
+</html>

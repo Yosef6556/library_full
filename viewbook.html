@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <title>Books</title>
+  <style>
+    .book-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .book-table th,
+    .book-table td {
+      padding: 8px;
+      text-align: left;
+      border: 5px solid #ddd;
+    }
+
+    .book-table th {
+      background-color: #f2f2f2;
+    }
+
+    .book-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .book-table tr:hover {
+      background-color: #f5f5f5;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>ALL BOOKS</h2>
+  <input type="text" id="search-name" placeholder="Enter Book name">
+  <button onclick="searchBook()">Search Book</button>
+  <div id="book-list"></div>
+
+  <script>
+    // const MY_SERVER = 'https://library-projact.onrender.com';
+    const MY_SERVER = 'http://127.0.0.1:5000';
+    
+    const searchBook = () => {
+      const searchName = document.getElementById('search-name').value;
+      axios.get(`${MY_SERVER}/books/search/${searchName}`)
+        .then(response => {
+          const books = response.data;
+          displayBooks(books);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    };
+
+    const getData = () => {
+      axios.get(`${MY_SERVER}/books`)
+        .then(response => {
+          const books = response.data;
+          displayBooks(books);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    };
+
+    const displayBooks = (books) => {
+      const bookList = document.getElementById('book-list');
+      bookList.innerHTML = '';
+
+      if (!books || books.length === 0) {
+        bookList.innerHTML = '<p>No books found.</p>';
+        return;
+      }
+
+      let tableHTML = `
+        <table class="book-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Writer</th>
+              <th>Year Published</th>
+              <th>Book type</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+      books.forEach(book => {
+        tableHTML += `
+          <tr>
+            <td>${book.bookname}</td>
+            <td>${book.writer}</td>
+            <td>${book.year_published}</td>
+            <td>${book.book_loan}</td>
+            <td>
+              <button onclick="deleteBook(${book.id})">DELETE</button>
+              <button onclick="updateBook(${book.id})">Update</button>
+            </td>
+          </tr>`;
+      });
+
+      tableHTML += `
+          </tbody>
+        </table>`;
+
+      bookList.innerHTML = tableHTML;
+    };
+
+
+    const updateBook = (id) => {
+  // You can prompt the user for updated details using window.prompt or display a form to update the book information.
+  // After obtaining the updated details, you can send a PUT request to the server to update the book.
+
+  // Example:
+  const newBookName = prompt('Enter the updated book name:');
+  const newWriter = prompt('Enter the updated writer:');
+  const newYearPublished = prompt('Enter the updated year published:');
+  const newBookLoan = prompt('Enter the updated book type:');
+
+  // Make a PUT request to update the book
+  axios.put(`${MY_SERVER}/books/update/${id}`, {
+      bookname: newBookName,
+      writer: newWriter,
+      year_published: newYearPublished,
+      book_loan: newBookLoan
+    })
+    .then(response => {
+      // Handle the response if needed
+      getData(); // Refresh the book list after updating
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};
+
+
+    async function deleteBook(bookId) {
+      try {
+        const response = await axios.delete(`${MY_SERVER}/books/delete/${bookId}`);
+        console.log(response.data); // Optional: handle the response as needed
+        if (response.status === 200) {
+          alert("Book deleted successfully!");
+          getData(); // Update the book list after deletion
+        } else {
+          alert("Error deleting book.");
+        }
+      } catch (error) {
+        console.error(error); // Optional: handle the error as needed
+        // alert("Error deleting book.");
+      }
+    }
+
+    getData();
+  </script>
+
+</body>
+
+</html>

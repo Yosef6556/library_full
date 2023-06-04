@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <title>Customers</title>
+    <style>
+        .loan-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .loan-table th,
+        .loan-table td {
+
+            padding: 8px;
+            text-align: left;
+            border: 5px solid #ddd;
+        }
+
+        .loan-table th {
+            background-color: #f2f2f2;
+        }
+
+        .loan-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .loan-table tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>ALL loans</h2>
+        <div id="loann"></div>
+
+        <script>
+            const MY_SERVER = 'https://library-projact.onrender.com';
+
+            const getData = () => {
+                axios.get(`${MY_SERVER}/loans`)
+                    .then(response => {
+                        const data = response.data;
+                        let tableHTML = `<table class="loan-table">
+                                        <tr>
+                                            <th>Customer Name</th>
+                                            <th>Book Name</th>
+                                            <th>Loan Date</th>
+                                            <th>Return Date</th>
+                                        </tr>`;
+                        data.forEach(loan => {
+                            tableHTML += `<tr>                            
+                                        <td>${loan.customer_name}</td>                            
+                                        <td>${loan.book_name}</td>
+                                        <td>${loan.loan_date}</td>
+                                        <td>${loan.return_date}</td>
+                                    </tr>`;
+                        });
+                        tableHTML += '</table>';
+                        loann.innerHTML = tableHTML;
+                    });
+            };
+
+
+
+            getData();
+           
+        </script>
+
+
+</body>
+
+</html>
